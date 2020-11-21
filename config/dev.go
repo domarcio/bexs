@@ -5,4 +5,7 @@ package config
 const (
 	// Env name
 	Env string = "dev"
+
+	// RouteStorageFilePath
+	RouteStorageFilePath string = "storage/routes.csv"
 )
