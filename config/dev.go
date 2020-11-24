@@ -7,5 +7,5 @@ const (
 	Env string = "dev"
 
 	// RouteStorageFilePath
-	RouteStorageFilePath string = "storage/routes.csv"
+	RouteStorageFilePath string = "storage/connections.csv"
 )
