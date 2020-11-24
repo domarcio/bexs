@@ -10,6 +10,7 @@ import (
 type Repository interface {
 	Create(ctx context.Context, e *entity.Connection) error
 	ListBySource(ctx context.Context, source *entity.Airport) ([]*entity.Connection, error)
+	Get(ctx context.Context, source *entity.Airport, target *entity.Airport) (*entity.Connection, error)
 }
 
 // Servicer inteface

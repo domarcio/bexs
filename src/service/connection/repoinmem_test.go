@@ -88,3 +88,43 @@ func TestListFromRepo(t *testing.T) {
 		}
 	})
 }
+
+func TestGetFromRepo(t *testing.T) {
+	repo := newRepoInmem()
+
+	t.Run("successful", func(t *testing.T) {
+		repo.Create(context.Background(), &entity.Connection{
+			Source: dummySourceAirport,
+			Target: dummyTargetAirport,
+			Price:  10.50,
+		})
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Millisecond)
+		defer cancel()
+
+		connection, err := repo.Get(ctx, dummySourceAirport, dummyTargetAirport)
+		if err != nil {
+			t.Errorf("unxpected error: %s", err.Error())
+		}
+		if connection.Source.Code != "foo" {
+			t.Errorf("expected foo, got %s", connection.Source)
+		}
+		if connection.Target.Code != "bar" {
+			t.Errorf("expected bar, got %s", connection.Source)
+		}
+		if connection.Price != 10.50 {
+			t.Errorf("expected 10.50, got %.2f", connection.Price)
+		}
+	})
+
+	t.Run("timeout", func(t *testing.T) {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Millisecond)
+		defer cancel()
+		time.Sleep(5 * time.Millisecond)
+
+		_, err := repo.Get(ctx, dummySourceAirport, dummyTargetAirport)
+		exp := entity.ErrTimeoutExceeded
+		if err != exp {
+			t.Errorf("expected error: %s", exp.Error())
+		}
+	})
+}

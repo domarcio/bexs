@@ -19,3 +19,6 @@ var ErrLenCode = errors.New("the Code cannot be greater than 3 or less than 3")
 
 // ErrInvalidCaseCode when the code is does not uppercase string
 var ErrInvalidCaseCode = errors.New("the Code needs to be uppercase")
+
+// ErrConnectionAlreadyExists error when already exists a connection by source and target
+var ErrConnectionAlreadyExists = errors.New("connection already exists")

@@ -27,3 +27,8 @@ func (repo *RouteCSVFile) Create(ctx context.Context, e *entity.Connection) erro
 func (repo *RouteCSVFile) ListBySource(ctx context.Context, source *entity.Airport) ([]*entity.Connection, error) {
 	return nil, nil
 }
+
+// Get returns a single result
+func (repo *RouteCSVFile) Get(ctx context.Context, source *entity.Airport, target *entity.Airport) (*entity.Connection, error) {
+	return nil, nil
+}

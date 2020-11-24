@@ -42,10 +42,27 @@ func (repo *repoinmem) ListBySource(ctx context.Context, source *entity.Airport)
 	}
 
 	for _, e := range repo.m {
-		if e.Source == source {
+		if e.Source.Code == source.Code {
 			list = append(list, e)
 		}
 	}
 
 	return list, nil
+}
+
+func (repo *repoinmem) Get(ctx context.Context, source *entity.Airport, target *entity.Airport) (*entity.Connection, error) {
+	select {
+	case <-time.After(4 * time.Millisecond):
+		break
+	case <-ctx.Done():
+		return nil, entity.ErrTimeoutExceeded
+	}
+
+	for _, e := range repo.m {
+		if e.Source.Code == source.Code && e.Target.Code == target.Code {
+			return e, nil
+		}
+	}
+
+	return nil, nil
 }
