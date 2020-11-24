@@ -1,4 +1,4 @@
-package route
+package connection
 
 import (
 	"context"
@@ -8,17 +8,17 @@ import (
 )
 
 type repoinmem struct {
-	m []*entity.Route
+	m []*entity.Connection
 }
 
 func newRepoInmem() *repoinmem {
-	var m = make([]*entity.Route, 0)
+	var m = make([]*entity.Connection, 0)
 	return &repoinmem{
 		m: m,
 	}
 }
 
-func (repo *repoinmem) Create(ctx context.Context, e *entity.Route) error {
+func (repo *repoinmem) Create(ctx context.Context, e *entity.Connection) error {
 	//entitystr := fmt.Sprintf("%s,%s,%s", e.From, e.To, strconv.FormatFloat(e.Price, 'f', 6, 64))
 
 	select {
@@ -33,8 +33,8 @@ func (repo *repoinmem) Create(ctx context.Context, e *entity.Route) error {
 	return nil
 }
 
-func (repo *repoinmem) ListFrom(ctx context.Context, from string) ([]*entity.Route, error) {
-	list := make([]*entity.Route, 0)
+func (repo *repoinmem) ListBySource(ctx context.Context, source *entity.Airport) ([]*entity.Connection, error) {
+	list := make([]*entity.Connection, 0)
 
 	select {
 	case <-time.After(4 * time.Millisecond):
@@ -44,7 +44,7 @@ func (repo *repoinmem) ListFrom(ctx context.Context, from string) ([]*entity.Rou
 	}
 
 	for _, e := range repo.m {
-		if e.From == from {
+		if e.Source == source {
 			list = append(list, e)
 		}
 	}

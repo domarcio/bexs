@@ -1,4 +1,4 @@
-package route
+package connection
 
 import (
 	"context"
@@ -8,12 +8,17 @@ import (
 	"github.com/domarcio/bexs/src/entity"
 )
 
+var (
+	dummySourceAirport = &entity.Airport{Code: "foo"}
+	dummyTargetAirport = &entity.Airport{Code: "bar"}
+)
+
 func TestCreateRepo(t *testing.T) {
 	repo := newRepoInmem()
-	e := &entity.Route{
-		From:  "foo",
-		To:    "bar",
-		Price: 10.50,
+	e := &entity.Connection{
+		Source: dummySourceAirport,
+		Target: dummyTargetAirport,
+		Price:  10.50,
 	}
 
 	t.Run("successful", func(t *testing.T) {
@@ -43,26 +48,26 @@ func TestListFromRepo(t *testing.T) {
 	repo := newRepoInmem()
 
 	t.Run("successful", func(t *testing.T) {
-		repo.Create(context.Background(), &entity.Route{
-			From:  "foo",
-			To:    "bar",
-			Price: 10.50,
+		repo.Create(context.Background(), &entity.Connection{
+			Source: dummySourceAirport,
+			Target: dummyTargetAirport,
+			Price:  10.50,
 		})
-		repo.Create(context.Background(), &entity.Route{
-			From:  "foo",
-			To:    "xpto",
-			Price: 5,
+		repo.Create(context.Background(), &entity.Connection{
+			Source: dummyTargetAirport,
+			Target: &entity.Airport{Code: "xpto"},
+			Price:  5,
 		})
-		repo.Create(context.Background(), &entity.Route{
-			From:  "bar",
-			To:    "foo",
-			Price: 5,
+		repo.Create(context.Background(), &entity.Connection{
+			Source: dummySourceAirport,
+			Target: &entity.Airport{Code: "xpto"},
+			Price:  5,
 		})
 
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Millisecond)
 		defer cancel()
 
-		list, err := repo.ListFrom(ctx, "foo")
+		list, err := repo.ListBySource(ctx, dummySourceAirport)
 		if err != nil {
 			t.Errorf("unxpected error: %s", err.Error())
 		}
@@ -76,7 +81,7 @@ func TestListFromRepo(t *testing.T) {
 		defer cancel()
 		time.Sleep(5 * time.Millisecond)
 
-		_, err := repo.ListFrom(ctx, "foo")
+		_, err := repo.ListBySource(ctx, dummySourceAirport)
 		exp := entity.ErrTimeoutExceeded
 		if err != exp {
 			t.Errorf("expected error: %s", exp.Error())

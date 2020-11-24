@@ -19,11 +19,11 @@ func NewRouteCSVFile(filename string) *RouteCSVFile {
 }
 
 // Create a new route
-func (repo *RouteCSVFile) Create(ctx context.Context, e *entity.Route) error {
+func (repo *RouteCSVFile) Create(ctx context.Context, e *entity.Connection) error {
 	return nil
 }
 
-// ListFrom routes
-func (repo *RouteCSVFile) ListFrom(ctx context.Context, from string) ([]*entity.Route, error) {
+// ListBySource routes
+func (repo *RouteCSVFile) ListBySource(ctx context.Context, source *entity.Airport) ([]*entity.Connection, error) {
 	return nil, nil
 }
