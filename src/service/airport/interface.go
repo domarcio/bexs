@@ -13,5 +13,5 @@ type Repository interface {
 
 // Servicer inteface
 type Servicer interface {
-	AirportExists(code string) error
+	AirportExists(code string) (bool, error)
 }
