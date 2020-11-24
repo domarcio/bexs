@@ -31,6 +31,10 @@ func (s *Service) LowCost(source *entity.Airport, target *entity.Airport) (strin
 		return "", err
 	}
 
+	if len(c) <= 0 {
+		return "", nil
+	}
+
 	var i informations
 	var k float64
 	for _, connections := range c {
@@ -40,5 +44,9 @@ func (s *Service) LowCost(source *entity.Airport, target *entity.Airport) (strin
 		}
 	}
 
-	return fmt.Sprintf("%s > $%.0f", strings.Join(i.connections, " - "), i.price), nil
+	return formatConnection(i.connections, i.price), nil
+}
+
+func formatConnection(s []string, price float64) string {
+	return fmt.Sprintf("%s > $%.0f", strings.Join(s, " - "), price)
 }

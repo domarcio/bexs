@@ -19,8 +19,6 @@ func newRepoInmem() *repoinmem {
 }
 
 func (repo *repoinmem) Create(ctx context.Context, e *entity.Connection) error {
-	//entitystr := fmt.Sprintf("%s,%s,%s", e.From, e.To, strconv.FormatFloat(e.Price, 'f', 6, 64))
-
 	select {
 	case <-time.After(2 * time.Millisecond):
 		break

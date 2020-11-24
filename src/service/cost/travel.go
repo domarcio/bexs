@@ -56,3 +56,7 @@ func (f *travel) availableConnections(source *entity.Airport, target *entity.Air
 
 	return nil
 }
+
+func (f *travel) reset() {
+	f.connections = make(map[index]informations, 0)
+}
