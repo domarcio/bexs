@@ -19,7 +19,7 @@ func NewService(repo Repository) *Service {
 
 // AirportExists check if an airport already exists by code
 func (s *Service) AirportExists(code string) (bool, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 6*time.Millisecond)
 	defer cancel()
 
 	airport, err := s.repo.Get(ctx, code)
