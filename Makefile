@@ -2,7 +2,7 @@
 all: build
 FORCE: ;
 
-SHELL := env ENV=$(ENV) $(SHELL)
+SHELL := env ENV=$(ENV) FILENAME=$(FILENAME) $(SHELL)
 ENV ?= dev
 
 .PHONY: build
@@ -18,6 +18,10 @@ image:
 build-cmd:
 	@echo "|bexs| -- GENERATE CMD BINARY FILE -- |bexs|"
 	@docker run --name bexs-nogues-build-cmd --rm -v $(PWD):/app:Z -w /app -e ENV=$(ENV) bexs-nogues ./scripts/make.sh build-cmd
+
+run-cmd:
+	@echo "|bexs| -- RUNNING CMD -- |bexs|"
+	@docker run -it --name bexs-nogues-build-cmd --rm -v $(PWD):/app:Z -w /app -e ENV=$(ENV) bexs-nogues ./scripts/make.sh run-cmd $(FILENAME)
 
 test:
 	@echo "|bexs| -- EXECUTE ALL TESTS -- |bexs|"

@@ -3,12 +3,7 @@
 package config
 
 const (
-	// Env name
-	Env string = "dev"
-
-	// RouteStorageFilePath
+	Env                  string = "dev"
 	RouteStorageFilePath string = "data/storage/routes.csv"
-
-	// Logfile app
-	Logfile string = "data/log/app.log"
+	Logfile              string = "data/log/app.log"
 )
