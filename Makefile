@@ -8,12 +8,17 @@ ENV ?= dev
 .PHONY: build
 
 clean:
-	rm -rf bin/*
+	@echo "|bexs| -- CLEAN BINARIES FILES -- |bexs|"
+	@rm -rf bin/*
 
-dependencies:
-	docker run --rm -v $(PWD):/app:Z -w /app golang:1.15 go mod download
-
-build: clean dependencies build-cmd
+image:
+	@echo "|bexs| -- GENERATE DOCKER IMAGE -- |bexs|"
+	@docker build --network=host -t bexs-nogues -f ./docker/Dockerfile .
 
 build-cmd:
-	docker run --rm -v $(PWD):/app:Z -w /app -e CGO_ENABLED=0 -e GOOS=linux -e TAG_NAME=$(ENV) golang:1.15 ./scripts/build.sh
+	@echo "|bexs| -- GENERATE CMD BINARY FILE -- |bexs|"
+	@docker run --name bexs-nogues-build-cmd --rm -v $(PWD):/app:Z -w /app -e ENV=$(ENV) bexs-nogues ./scripts/make.sh build-cmd
+
+test:
+	@echo "|bexs| -- EXECUTE ALL TESTS -- |bexs|"
+	@docker run --name bexs-nogues-test --rm -v $(PWD):/app:Z -w /app -e ENV=$(ENV) bexs-nogues ./scripts/make.sh test
