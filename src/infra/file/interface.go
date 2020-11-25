@@ -1,4 +1,4 @@
-package parsefile
+package file
 
 // Reader interface
 type Reader interface {
@@ -8,4 +8,11 @@ type Reader interface {
 	Rewind()
 	Valid() bool
 	Error() error
+	CloseFile() error
+}
+
+// Writer interface
+type Writer interface {
+	Append(txt string) error
+	CloseFile() error
 }

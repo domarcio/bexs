@@ -1,4 +1,4 @@
-package parsefile
+package file
 
 import (
 	"fmt"
@@ -38,7 +38,7 @@ func TestIterator(t *testing.T) {
 		tmpFile.Close()
 	}()
 
-	csvreader := NewCSVParseFile(tmpFile, ",")
+	csvreader := NewCSVfile(tmpFile, ",")
 
 	assertTests := []struct {
 		arg1    string

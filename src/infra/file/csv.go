@@ -1,4 +1,4 @@
-package parsefile
+package file
 
 import (
 	"bufio"
@@ -17,8 +17,8 @@ type CSVFile struct {
 	currentKey  int
 }
 
-// NewCSVParseFile create a new csv file iterator
-func NewCSVParseFile(osfile *os.File, split string) *CSVFile {
+// NewCSVfile create a new csv file iterator
+func NewCSVfile(osfile *os.File, split string) *CSVFile {
 	scan := bufio.NewScanner(osfile)
 	scan.Split(bufio.ScanLines)
 
@@ -85,4 +85,9 @@ func (c *CSVFile) Valid() bool {
 // Error returns a current error line
 func (c *CSVFile) Error() error {
 	return c.currentErr
+}
+
+// CloseFile osfile
+func (c *CSVFile) CloseFile() error {
+	return c.osfile.Close()
 }

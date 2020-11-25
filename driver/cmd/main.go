@@ -11,15 +11,16 @@ import (
 	"strings"
 
 	"github.com/domarcio/bexs/config"
-	commonLog "github.com/domarcio/bexs/src/common/log"
 	"github.com/domarcio/bexs/src/entity"
+	"github.com/domarcio/bexs/src/infra/file"
+	commonLog "github.com/domarcio/bexs/src/infra/log"
 	"github.com/domarcio/bexs/src/infra/repository"
 	"github.com/domarcio/bexs/src/service/connection"
 	"github.com/domarcio/bexs/src/service/cost"
 )
 
 func main() {
-	log := commonLog.NewLogfile(config.Logfile, "[BEXS] ", log.LstdFlags|log.Lmicroseconds|log.Llongfile)
+	log := commonLog.NewLogfile(config.Logfile, "[CMD] ", log.LstdFlags|log.Lmicroseconds|log.Llongfile)
 
 	log.Info("Running cli interface on `%s` environment", config.Env)
 
@@ -30,7 +31,18 @@ func main() {
 		os.Exit(1)
 	}
 
-	repo, err := repository.NewRouteCSVFile(filename)
+	write, read, err := file.NewCSVManager(filename)
+	if err != nil {
+		log.Error(err.Error())
+		fmt.Fprintf(os.Stdout, "Error on create csv manager: %s\n", err.Error())
+		os.Exit(1)
+	}
+	defer func() {
+		write.CloseFile()
+		read.CloseFile()
+	}()
+
+	repo, err := repository.NewRouteCSVFile(write, read)
 	if err != nil {
 		log.Error(err.Error())
 		fmt.Fprintf(os.Stdout, "Error on repository: %s\n", err.Error())
