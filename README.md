@@ -7,7 +7,7 @@ Encontrar a **melhor rota (conexões)** independentemente do valor ($). Feito em
 1. **[Sobre o projeto](#sobre-o-projeto)**;
 2. **[Estrutura & Design adotados](#estrutura--design-adotados)**;
 3. **[Como executar](#como-executar)**;
-4. **[API](#)**.
+4. **[API](#api)**.
 
 ## Sobre o projeto
 O objetivo é encontrar a **melhor alternativa (valor mais baixo)** para um viajante. O viajante **não quer saber o número de conexões que o avião fará**, ele quer pagar mais barato.
@@ -47,7 +47,7 @@ Algumas peças chaves que foram pensadas:
 ### Script para encontrar a melhor rota com baixo custo
 A rotina é relativamente simples: Usar uma função recursiva que sabe quando quando estamos no ínicio (*source*) e no fim (*target*), e dessa forma ela vai adicionando os percursos em um `map` enquanto não chegamos no final da nossa jornada.
 
-> Confeso que eu quebrei a cabeça para chegar nesse resultado. Caso tenha uma forma mais simples eu gostaria de saber :)
+> confesso que eu quebrei a cabeça para chegar nesse resultado. Caso tenha uma forma mais simples eu gostaria de saber :)
 
 
 ## Como executar
@@ -72,4 +72,46 @@ $ make run-cmd FILENAME=./data/storage/routes.csv
 ### Subir a API
 ```bash
 $ make run-api
+```
+
+## API
+
+Abaixo uma rápida doc sobre a API e como executá-la.
+
+### Breve documentação
+
+Nossa API consiste em dois endpoins, um para a criação das rotas e outro para consultar a melhor opção de baixo custo. Todos os *responses* dos *endpoints* são no formato **JSON**.
+
+#### Endpoints
+|PATH|Request Method|Campo|Obrigatório?|Objetivo|Características|
+|----|--------------|-----|------------|--------|---------------|
+|**/api/connection**|POST|source|Sim|Informar a rota de origem do vôo|`min=3,max=3,pattern=A-Z`|
+|||target|Sim|Informar a rota de destino do vôo|`min=3,max=3,pattern=A-Z`|
+|||price|Sim|Valor do vôo|`min=1,pattern=0-9`|
+|**/api/cost**|GET|source|Sim|Informar a rota de origem do vôo|`min=3,max=3,pattern=A-Z`|
+|||target|Sim|Informar a rota de destino do vôo|`min=3,max=3,pattern=A-Z`|
+
+### Como executar
+
+Tem o Postman? Pode usar:
+|Criar uma conexão (rota)]|Encontrar a rota com menor custo|
+|---------|--------|
+|[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/0068fc9ffd8b718fb236)|[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/fead5a67140bd7634c64)|
+
+Se preferir, pode usar o `curl`:
+
+#### Criar uma conexão
+```bash
+$ curl --location --request POST 'http://localhost:7007/api/connection' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "source": "SPA",
+    "target": "ACR",
+    "price": 100
+}'
+```
+
+#### Encontrar a rota com menor custo
+```bash
+$ curl --location --request GET 'http://localhost:7007/api/cost?source=CDG&target=GRU'
 ```
