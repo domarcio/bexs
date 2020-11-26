@@ -99,7 +99,7 @@ func setupConnection(service connection.Servicer, w http.ResponseWriter, r *http
 	airport := handler.NewConnectionHandlers(service)
 
 	switch r.Method {
-	case http.MethodGet:
+	case http.MethodPost:
 		airport.Create(w, r)
 		break
 	default:

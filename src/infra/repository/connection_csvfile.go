@@ -28,7 +28,7 @@ func NewRouteCSVFile(w file.Writer, r file.Reader) (*RouteCSVFile, error) {
 
 // Create a new route
 func (repo *RouteCSVFile) Create(ctx context.Context, e *entity.Connection) error {
-	txt := fmt.Sprintf("%s,%s,%.0f", e.Source.Code, e.Target.Code, e.Price)
+	txt := fmt.Sprintf("%s,%s,%.0f\n", e.Source.Code, e.Target.Code, e.Price)
 	return repo.writer.Append(txt)
 }
 

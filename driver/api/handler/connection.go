@@ -35,9 +35,10 @@ func (c *ConnectionHandlers) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var messageErr string
 	source, err := entity.NewAirport(payload.Source)
 	if err != nil {
-		messageErr := structToString(responseError{
+		messageErr = structToString(responseError{
 			Message: "Invalid payload! " + err.Error(),
 		})
 		w.WriteHeader(http.StatusBadRequest)
@@ -47,7 +48,7 @@ func (c *ConnectionHandlers) Create(w http.ResponseWriter, r *http.Request) {
 
 	target, err := entity.NewAirport(payload.Target)
 	if err != nil {
-		messageErr := structToString(responseError{
+		messageErr = structToString(responseError{
 			Message: "Invalid payload! " + err.Error(),
 		})
 		w.WriteHeader(http.StatusBadRequest)
@@ -60,12 +61,22 @@ func (c *ConnectionHandlers) Create(w http.ResponseWriter, r *http.Request) {
 		switch err {
 		case entity.ErrMissingSourceOrTarget:
 		case entity.ErrInvalidPrice:
-			messageErr := structToString(responseError{
+			messageErr = structToString(responseError{
 				Message: "Invalid payload! " + err.Error(),
 			})
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte(messageErr))
+			return
+		case entity.ErrConnectionAlreadyExists:
+			messageErr = structToString(responseError{
+				Message: "Invalid payload! " + err.Error(),
+			})
+			w.WriteHeader(http.StatusConflict)
+			w.Write([]byte(messageErr))
+			return
 		}
+
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
