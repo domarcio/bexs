@@ -90,7 +90,7 @@ func main() {
 
 	<-sg
 	log.Info("Finish cli")
-	fmt.Fprintln(os.Stdout, "$ bye!")
+	fmt.Fprintln(os.Stdout, "\n$ bye!")
 }
 
 func handleFilename() (string, error) {
