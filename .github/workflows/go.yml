@@ -10,11 +10,10 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: Get dependencies
-      run: make clean && make image
-
-    - name: Build
-      run: make build
-
-    - name: Test
-      run: make test
+      - uses: actions/checkout@main
+      - name: Get dependencies
+        run: make clean && make image
+      - name: Build
+        run: make build
+      - name: Test
+        run: make test
