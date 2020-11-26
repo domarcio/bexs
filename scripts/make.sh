@@ -8,6 +8,6 @@ case $1 in
     ./bin/cmd $2
   ;;
   "test")
-    go clean -testcache && go test -tags "${ENV}" ./...
+    go clean -testcache && go test -tags "testing" ./...
   ;;
 esac

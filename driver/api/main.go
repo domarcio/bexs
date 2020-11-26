@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -9,14 +8,13 @@ import (
 	"github.com/domarcio/bexs/config"
 	"github.com/domarcio/bexs/driver/api/handler"
 	"github.com/domarcio/bexs/src/infra/file"
-	commonLog "github.com/domarcio/bexs/src/infra/log"
 	"github.com/domarcio/bexs/src/infra/repository"
 	"github.com/domarcio/bexs/src/service/connection"
 	"github.com/domarcio/bexs/src/service/cost"
 )
 
 func main() {
-	log := commonLog.NewLogfile(config.Logfile, "[API] ", log.LstdFlags|log.Lmicroseconds|log.Llongfile)
+	log := config.LogService
 	log.Info("Running api interface on `%s` environment", config.Env)
 
 	write, read, err := file.NewCSVManager(config.RouteStorageFilePath)
@@ -35,8 +33,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	connService := connection.NewService(repo)
-	costService := cost.NewService(connService)
+	connService := connection.NewService(repo, log)
+	costService := cost.NewService(connService, log)
 
 	// Waiting for CTRL+C
 	sg := make(chan os.Signal, 1)
@@ -69,9 +67,6 @@ func (a apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	resource := r.URL.Path[5:]
 
 	switch resource {
-	case "airport":
-		setupAirpot(w, r)
-		return
 	case "connection":
 		setupConnection(a.connectionService, w, r)
 		return
@@ -83,24 +78,12 @@ func (a apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 }
 
-func setupAirpot(w http.ResponseWriter, r *http.Request) {
-	airport := handler.NewAirportHandlers()
-
-	switch r.Method {
-	case http.MethodPost:
-		airport.Create(w, r)
-		break
-	default:
-		w.WriteHeader(http.StatusNotImplemented)
-	}
-}
-
 func setupConnection(service connection.Servicer, w http.ResponseWriter, r *http.Request) {
-	airport := handler.NewConnectionHandlers(service)
+	connection := handler.NewConnectionHandlers(service)
 
 	switch r.Method {
 	case http.MethodPost:
-		airport.Create(w, r)
+		connection.Create(w, r)
 		break
 	default:
 		w.WriteHeader(http.StatusNotImplemented)

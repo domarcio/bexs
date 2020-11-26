@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"regexp"
@@ -13,14 +12,13 @@ import (
 	"github.com/domarcio/bexs/config"
 	"github.com/domarcio/bexs/src/entity"
 	"github.com/domarcio/bexs/src/infra/file"
-	commonLog "github.com/domarcio/bexs/src/infra/log"
 	"github.com/domarcio/bexs/src/infra/repository"
 	"github.com/domarcio/bexs/src/service/connection"
 	"github.com/domarcio/bexs/src/service/cost"
 )
 
 func main() {
-	log := commonLog.NewLogfile(config.Logfile, "[CMD] ", log.LstdFlags|log.Lmicroseconds|log.Llongfile)
+	log := config.LogService
 
 	log.Info("Running cli interface on `%s` environment", config.Env)
 
@@ -48,8 +46,8 @@ func main() {
 		fmt.Fprintf(os.Stdout, "Error on repository: %s\n", err.Error())
 		os.Exit(1)
 	}
-	connService := connection.NewService(repo)
-	costService := cost.NewService(connService)
+	connService := connection.NewService(repo, log)
+	costService := cost.NewService(connService, log)
 
 	// Waiting for CTRL+C
 	sg := make(chan os.Signal, 1)

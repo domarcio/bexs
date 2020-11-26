@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/domarcio/bexs/src/entity"
+	commonLog "github.com/domarcio/bexs/src/infra/log"
 	"github.com/domarcio/bexs/src/service/connection"
 )
 
@@ -49,7 +50,7 @@ func newConnectionService() connection.Servicer {
 }
 
 func TestLowCost(t *testing.T) {
-	s := NewService(newConnectionService())
+	s := NewService(newConnectionService(), commonLog.NewLogprint())
 
 	t.Run("successful_gru_cdg", func(t *testing.T) {
 		result, err := s.LowCost(&entity.Airport{Code: "GRU"}, &entity.Airport{Code: "CDG"})

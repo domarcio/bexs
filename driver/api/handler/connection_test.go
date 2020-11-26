@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/domarcio/bexs/src/entity"
+	commonLog "github.com/domarcio/bexs/src/infra/log"
 	"github.com/domarcio/bexs/src/service/connection"
 )
 
@@ -32,7 +33,7 @@ func (*repoService) Get(ctx context.Context, source *entity.Airport, target *ent
 }
 
 func TestCreate(t *testing.T) {
-	handler := NewConnectionHandlers(connection.NewService(&repoService{}))
+	handler := NewConnectionHandlers(connection.NewService(&repoService{}, commonLog.NewLogprint()))
 	endpoint := "/api/connection"
 
 	sm := http.NewServeMux()
@@ -72,6 +73,15 @@ func TestCreate(t *testing.T) {
 		}
 
 		reqBody = bytes.NewBufferString(`{"source": "BAR", "target": "FOO"}`)
+		res, err = http.Post(ts.URL+endpoint, "application/json", reqBody)
+		if err != nil {
+			t.Error("unexpected error")
+		}
+		if res.StatusCode != http.StatusBadRequest {
+			t.Errorf("expected status code %d, got %d", http.StatusBadRequest, res.StatusCode)
+		}
+
+		reqBody = bytes.NewBufferString(`{"source": "123", "target": "456", "price": 1}`)
 		res, err = http.Post(ts.URL+endpoint, "application/json", reqBody)
 		if err != nil {
 			t.Error("unexpected error")

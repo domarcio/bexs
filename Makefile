@@ -25,4 +25,6 @@ run-cmd:
 
 test:
 	@echo "|bexs| -- EXECUTE ALL TESTS -- |bexs|"
-	@docker run --name bexs-nogues-test --rm -v $(PWD):/app:Z -w /app -e ENV=$(ENV) bexs-nogues ./scripts/make.sh test
+	@rm -f ./data/storage/testing.routes.csv
+	@touch ./data/storage/testing.routes.csv
+	@docker run --name bexs-nogues-test --rm -v $(PWD):/app:Z -w /app bexs-nogues ./scripts/make.sh test

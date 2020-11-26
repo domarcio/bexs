@@ -29,6 +29,12 @@ func TestNewAirport(t *testing.T) {
 			t.Errorf("expected an error, got nil")
 		}
 	})
+	t.Run("number", func(t *testing.T) {
+		_, err := NewAirport("123")
+		if err == nil {
+			t.Errorf("expected an error, got nil")
+		}
+	})
 	t.Run("successful", func(t *testing.T) {
 		a, err := NewAirport("ABC")
 		if err != nil {

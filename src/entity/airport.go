@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"regexp"
 	"strings"
 	"unicode"
 )
@@ -34,6 +35,14 @@ func (c *Airport) Validate() error {
 	lenCode := len(c.Code)
 	if lenCode > 3 || lenCode < 3 {
 		return ErrLenCode
+	}
+
+	rg, err := regexp.Match("^[0-9]", []byte(c.Code))
+	if err != nil {
+		return err
+	}
+	if rg {
+		return ErrNumberCode
 	}
 
 	for _, s := range c.Code {

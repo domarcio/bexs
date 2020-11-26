@@ -4,10 +4,11 @@ import (
 	"testing"
 
 	"github.com/domarcio/bexs/src/entity"
+	commonLog "github.com/domarcio/bexs/src/infra/log"
 )
 
 func TestCreateConnection(t *testing.T) {
-	service := NewService(newRepoInmem())
+	service := NewService(newRepoInmem(), commonLog.NewLogprint())
 
 	t.Run("error", func(t *testing.T) {
 		_, err := service.CreateConnection(&entity.Airport{Code: "FOO"}, &entity.Airport{Code: "BAR"}, 0)
@@ -45,7 +46,7 @@ func TestCreateConnection(t *testing.T) {
 }
 
 func TestListBySource(t *testing.T) {
-	service := NewService(newRepoInmem())
+	service := NewService(newRepoInmem(), commonLog.NewLogprint())
 
 	t.Run("successful", func(t *testing.T) {
 		service.CreateConnection(&entity.Airport{Code: "FOO"}, &entity.Airport{Code: "BAR"}, 1)

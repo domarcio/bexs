@@ -56,6 +56,9 @@ func (repo *RouteCSVFile) ListBySource(ctx context.Context, source *entity.Airpo
 		}
 
 		line := repo.reader.Current()
+		if len(line) < 3 {
+			continue
+		}
 
 		parsePrice, err := strconv.ParseFloat(line[2], 64)
 		if err != nil {
@@ -97,6 +100,9 @@ func (repo *RouteCSVFile) Get(ctx context.Context, source *entity.Airport, targe
 		}
 
 		line := repo.reader.Current()
+		if len(line) < 3 {
+			continue
+		}
 
 		parsePrice, err := strconv.ParseFloat(line[2], 64)
 		if err != nil {
