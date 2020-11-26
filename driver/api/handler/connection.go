@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/domarcio/bexs/src/entity"
@@ -59,8 +60,7 @@ func (c *ConnectionHandlers) Create(w http.ResponseWriter, r *http.Request) {
 	_, err = c.service.CreateConnection(source, target, payload.Price)
 	if err != nil {
 		switch err {
-		case entity.ErrMissingSourceOrTarget:
-		case entity.ErrInvalidPrice:
+		case entity.ErrMissingSourceOrTarget, entity.ErrInvalidPrice, entity.ErrSourceAndTargetAreTheSame:
 			messageErr = structToString(responseError{
 				Message: "Invalid payload! " + err.Error(),
 			})
@@ -75,7 +75,7 @@ func (c *ConnectionHandlers) Create(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(messageErr))
 			return
 		}
-
+		fmt.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

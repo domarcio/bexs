@@ -33,5 +33,9 @@ func (c *Connection) Validate() error {
 		return ErrInvalidPrice
 	}
 
+	if c.Source.Code == c.Target.Code {
+		return ErrSourceAndTargetAreTheSame
+	}
+
 	return nil
 }

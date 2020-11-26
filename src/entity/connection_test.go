@@ -17,6 +17,12 @@ func TestNewConnection(t *testing.T) {
 			t.Errorf("expected an error, got nil")
 		}
 	})
+	t.Run("same", func(t *testing.T) {
+		_, err := NewConnection(&Airport{Code: "FOO"}, &Airport{Code: "FOO"}, 1)
+		if err == nil {
+			t.Errorf("expected an error, got nil")
+		}
+	})
 	t.Run("successful", func(t *testing.T) {
 		c, err := NewConnection(&Airport{Code: "FOO"}, &Airport{Code: "BAR"}, 1)
 		if err != nil {

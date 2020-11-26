@@ -89,6 +89,15 @@ func TestCreate(t *testing.T) {
 		if res.StatusCode != http.StatusBadRequest {
 			t.Errorf("expected status code %d, got %d", http.StatusBadRequest, res.StatusCode)
 		}
+
+		reqBody = bytes.NewBufferString(`{"source": "FOO", "target": "FOO", "price": 1}`)
+		res, err = http.Post(ts.URL+endpoint, "application/json", reqBody)
+		if err != nil {
+			t.Error("unexpected error")
+		}
+		if res.StatusCode != http.StatusBadRequest {
+			t.Errorf("expected status code %d, got %d", http.StatusBadRequest, res.StatusCode)
+		}
 	})
 
 	t.Run("already_exists", func(t *testing.T) {

@@ -25,3 +25,6 @@ var ErrNumberCode = errors.New("the Code cannot be a number")
 
 // ErrConnectionAlreadyExists error when already exists a connection by source and target
 var ErrConnectionAlreadyExists = errors.New("connection already exists")
+
+// ErrSourceAndTargetAreTheSame error when the source and target are the same
+var ErrSourceAndTargetAreTheSame = errors.New("source and target are not allowed to be the same")
