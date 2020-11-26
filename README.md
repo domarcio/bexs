@@ -94,9 +94,7 @@ Nossa API consiste em dois endpoins, um para a criação das rotas e outro para 
 ### Como executar
 
 Tem o Postman? Pode usar:
-|Criar uma conexão (rota)]|Encontrar a rota com menor custo|
-|---------|--------|
-|[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/0068fc9ffd8b718fb236)|[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/fead5a67140bd7634c64)|
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/67af6193814145e23ddc)
 
 Se preferir, pode usar o `curl`:
 
@@ -113,5 +111,6 @@ $ curl --location --request POST 'http://localhost:7007/api/connection' \
 
 #### Encontrar a rota com menor custo
 ```bash
-$ curl --location --request GET 'http://localhost:7007/api/cost?source=CDG&target=GRU'
+$ curl --location --request GET 'http://localhost:7007/api/cost?source=CDG&target=GRU' \
+--header 'Content-Type: application/json'
 ```
